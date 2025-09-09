@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // API Configuration
-const API_KEY = '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';
+const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY || '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';
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
 
@@ -18,21 +18,28 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentPhase, setCurrentPhase] = useState('');
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [apiKey, setApiKey] = useState(API_KEY);
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
 
   const callGrokAPI = async (prompt) => {
-    console.log('Making API call...');
-    console.log('API Key:', API_KEY.substring(0, 10) + '...');
+    console.log('Making API call to OpenRouter...');
+    console.log('API Key:', apiKey.substring(0, 10) + '...');
     console.log('Model:', MODEL);
     console.log('Prompt length:', prompt.length);
+    
+    if (!apiKey || apiKey === 'your_api_key_here') {
+      throw new Error('Please configure your OpenRouter API key first.');
+    }
     
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`,
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'FlowCraft AI'
+          'Authorization': `Bearer ${apiKey}`,
+          'HTTP-Referer': 'https://flowcraft-ai.vercel.app',
+          'X-Title': 'FlowCraft AI',
+          'User-Agent': 'FlowCraft-AI/1.0'
         },
         body: JSON.stringify({
           model: MODEL,
@@ -43,7 +50,8 @@ function App() {
             }
           ],
           temperature: 0.7,
-          max_tokens: 2000
+          max_tokens: 2000,
+          stream: false
         })
       });
 
@@ -53,7 +61,16 @@ function App() {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('API Error Response:', errorText);
-        throw new Error(`API Error: ${response.status} - ${errorText}`);
+        
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please check your API key. Get a new key from https://openrouter.ai/keys');
+        } else if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        } else if (response.status === 400) {
+          throw new Error('Invalid request. Please check your input.');
+        } else {
+          throw new Error(`API Error: ${response.status} - ${errorText}`);
+        }
       }
 
       const data = await response.json();
@@ -249,14 +266,79 @@ Return ONLY the HTML code, no explanations:`;
               </div>
             </div>
             <div className="hidden md:flex items-center space-x-6">
+              <button
+                onClick={() => setShowApiKeyInput(!showApiKeyInput)}
+                className="text-sm text-gray-600 hover:text-black transition-colors duration-200 font-medium"
+              >
+                {apiKey ? 'API Key ✓' : 'Configure API Key'}
+              </button>
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-gray-700 font-medium">AI Ready</span>
+                <div className={`w-2 h-2 rounded-full animate-pulse ${apiKey ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className="text-sm text-gray-700 font-medium">{apiKey ? 'AI Ready' : 'API Key Required'}</span>
               </div>
             </div>
           </div>
         </div>
       </nav>
+
+      {/* API Key Input Modal */}
+      {showApiKeyInput && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-black text-black">Configure API Key</h3>
+              <button
+                onClick={() => setShowApiKeyInput(false)}
+                className="text-gray-400 hover:text-black transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-black mb-2">OpenRouter API Key</label>
+                <input
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="sk-or-v1-..."
+                  className="w-full bg-gray-50 rounded-xl px-4 py-3 text-black placeholder-gray-500 border-2 border-gray-200 focus:border-black focus:outline-none transition-all duration-300"
+                />
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Get your API key:</strong><br />
+                  1. Go to <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="underline">openrouter.ai/keys</a><br />
+                  2. Sign up and create a new key<br />
+                  3. Copy and paste it above
+                </p>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowApiKeyInput(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-black font-bold py-3 rounded-xl transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowApiKeyInput(false);
+                    setError(null);
+                  }}
+                  className="flex-1 bg-black hover:bg-gray-800 text-white font-bold py-3 rounded-xl transition-colors duration-200"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="pt-24 min-h-screen relative z-10">

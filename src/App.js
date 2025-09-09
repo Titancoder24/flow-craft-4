@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// API Configuration - Hardcoded for easy deployment
-const API_KEY = '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';
+// API Configuration - Uses environment variable
+const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY;
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
 
@@ -22,9 +22,13 @@ function App() {
 
   const callGrokAPI = async (prompt) => {
     console.log('Making API call to OpenRouter...');
-    console.log('API Key:', API_KEY.substring(0, 10) + '...');
+    console.log('API Key:', API_KEY ? API_KEY.substring(0, 10) + '...' : 'NOT SET');
     console.log('Model:', MODEL);
     console.log('Prompt length:', prompt.length);
+    
+    if (!API_KEY) {
+      throw new Error('API key not configured. Please add REACT_APP_OPENROUTER_API_KEY environment variable in Vercel settings.');
+    }
     
     try {
       const response = await fetch(API_URL, {

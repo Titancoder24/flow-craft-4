@@ -19,6 +19,9 @@ For Vercel deployment, add this environment variable in your project settings:
 5. Click "Save"
 6. Redeploy your project
 
-## Alternative: Use the hardcoded key
+## Important Notes:
 
-The app will work with the hardcoded key as a fallback, but using environment variables is more secure and recommended for production.
+- **No hardcoded API key** - The app now requires the environment variable
+- **More secure** - API key is not exposed in the codebase
+- **Production ready** - Follows best practices for environment variables
+- **Easy to update** - Change the key in Vercel without code changes

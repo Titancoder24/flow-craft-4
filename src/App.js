@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // API Configuration
-const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY || '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';
+const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY;
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
 
@@ -27,8 +27,8 @@ function App() {
     console.log('Model:', MODEL);
     console.log('Prompt length:', prompt.length);
     
-    if (!apiKey || apiKey === 'your_api_key_here') {
-      throw new Error('Please configure your OpenRouter API key first.');
+    if (!apiKey) {
+      throw new Error('API key not configured. Please add REACT_APP_OPENROUTER_API_KEY to your environment variables.');
     }
     
     try {
@@ -311,10 +311,11 @@ Return ONLY the HTML code, no explanations:`;
               
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <p className="text-sm text-blue-800">
-                  <strong>Get your API key:</strong><br />
-                  1. Go to <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="underline">openrouter.ai/keys</a><br />
-                  2. Sign up and create a new key<br />
-                  3. Copy and paste it above
+                  <strong>For Vercel deployment:</strong><br />
+                  1. Go to your Vercel project settings<br />
+                  2. Add environment variable: <code className="bg-gray-200 px-1 rounded">REACT_APP_OPENROUTER_API_KEY</code><br />
+                  3. Get your key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="underline">openrouter.ai/keys</a><br />
+                  4. Redeploy your project
                 </p>
               </div>
               

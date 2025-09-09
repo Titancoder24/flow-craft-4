@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // API Configuration
-const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY || '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';
+const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY || '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';
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
 

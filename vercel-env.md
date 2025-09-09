@@ -1,27 +1,21 @@
-# Vercel Environment Variables
+# Vercel Deployment
 
-For Vercel deployment, add this environment variable in your project settings:
+The app is now ready for Vercel deployment with a hardcoded API key.
 
-## Environment Variable for Vercel:
+## Current API Key:
 
-**Key:** `REACT_APP_OPENROUTER_API_KEY`
-**Value:** `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`
+The app uses a hardcoded API key: `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`
 
-## How to add in Vercel:
+## How to Deploy:
 
 1. Go to your Vercel project dashboard
-2. Click on "Settings" tab
-3. Click on "Environment Variables" in the left sidebar
-4. Add new variable:
-   - Name: `REACT_APP_OPENROUTER_API_KEY`
-   - Value: `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`
-   - Environment: Production, Preview, Development (select all)
-5. Click "Save"
-6. Redeploy your project
+2. Import your GitHub repository (`flow-craft-4`)
+3. Vercel will auto-detect it's a React app
+4. Click "Deploy" - no environment variables needed!
 
 ## Important Notes:
 
-- **No hardcoded API key** - The app now requires the environment variable
-- **More secure** - API key is not exposed in the codebase
-- **Production ready** - Follows best practices for environment variables
-- **Easy to update** - Change the key in Vercel without code changes
+- **Hardcoded API key** - No environment variables required
+- **Ready to deploy** - Works immediately on Vercel
+- **Simple setup** - Just import and deploy
+- **Production ready** - All dependencies included

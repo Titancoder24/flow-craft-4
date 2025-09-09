@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // API Configuration
-const API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY || 'sk-or-v1-test-key-placeholder';
+const API_KEY = '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';
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
 
@@ -20,23 +20,12 @@ function App() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [apiKey] = useState(API_KEY);
 
-  // Debug environment variable
-  useEffect(() => {
-    console.log('Environment check:');
-    console.log('REACT_APP_OPENROUTER_API_KEY:', process.env.REACT_APP_OPENROUTER_API_KEY);
-    console.log('API_KEY constant:', API_KEY);
-    console.log('apiKey state:', apiKey);
-  }, [apiKey]);
 
   const callGrokAPI = async (prompt) => {
     console.log('Making API call to OpenRouter...');
-    console.log('API Key:', apiKey ? apiKey.substring(0, 10) + '...' : 'NOT SET');
+    console.log('API Key:', apiKey.substring(0, 10) + '...');
     console.log('Model:', MODEL);
     console.log('Prompt length:', prompt.length);
-    
-    if (!apiKey) {
-      throw new Error('API key not configured. Please add REACT_APP_OPENROUTER_API_KEY environment variable in Vercel settings.');
-    }
     
     try {
       const response = await fetch(API_URL, {

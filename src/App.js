@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // API Configuration
-const API_KEY = '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';
+const API_KEY = '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';
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
 
@@ -18,12 +18,11 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentPhase, setCurrentPhase] = useState('');
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [apiKey] = useState(API_KEY);
 
 
   const callGrokAPI = async (prompt) => {
     console.log('Making API call to OpenRouter...');
-    console.log('API Key:', apiKey.substring(0, 10) + '...');
+    console.log('API Key:', API_KEY.substring(0, 10) + '...');
     console.log('Model:', MODEL);
     console.log('Prompt length:', prompt.length);
     
@@ -32,7 +31,7 @@ function App() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${API_KEY}`,
           'HTTP-Referer': 'https://flowcraft-ai.vercel.app',
           'X-Title': 'FlowCraft AI',
           'User-Agent': 'FlowCraft-AI/1.0'
@@ -263,8 +262,8 @@ Return ONLY the HTML code, no explanations:`;
             </div>
             <div className="hidden md:flex items-center space-x-6">
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full animate-pulse ${apiKey ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                <span className="text-sm text-gray-700 font-medium">{apiKey ? 'AI Ready' : 'API Key Required'}</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-gray-700 font-medium">AI Ready</span>
               </div>
             </div>
           </div>

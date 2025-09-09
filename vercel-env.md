@@ -4,7 +4,7 @@ The app is now ready for Vercel deployment with a hardcoded API key.
 
 ## Current API Key:
 
-The app uses a hardcoded API key: `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`
+The app uses a hardcoded API key: `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`
 
 ## How to Deploy:
 

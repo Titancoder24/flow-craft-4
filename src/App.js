@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-// API Configuration
+// API Configuration - Hardcoded for easy deployment
 const API_KEY = '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';
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'x-ai/grok-code-fast-1';
